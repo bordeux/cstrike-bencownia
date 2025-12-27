@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   cstrike-bencownia:
-    build: .
+    image: ghcr.io/bordeux/cstrike-server:latest
     container_name: cstrike-bencownia
     platform: linux/amd64
     restart: unless-stopped
