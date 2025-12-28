@@ -1,2 +1,4 @@
 FROM ghcr.io/bordeux/cstrike-server:latest
-COPY ./cstrike /opt/steam/hlds/cstrike_overwrites
+ENV AMXMODX_AUTOCOMPILE=1
+COPY ./cstrike ${CSTRIKE_BASE_PATH}
+RUN ${HELPERS_PATH}/amxmodx-compile.sh ${CSTRIKE_BASE_PATH}/addons/amxmodx
