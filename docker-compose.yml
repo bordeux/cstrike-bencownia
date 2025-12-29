@@ -1,4 +1,16 @@
 services:
+  cstrike-mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: change-me
+      MYSQL_DATABASE: cstrike
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
   cstrike-bencownia:
     image: ghcr.io/bordeux/cstrike-server:latest
     container_name: cstrike-bencownia
@@ -19,5 +31,10 @@ services:
       - SERVER_MAX_PLAYERS=20
       - SERVER_GAME=cstrike
       - SERVER_PASSWORD=change-me
+      - DB_HOST=cstrike-mysql
+      - DB_PORT=3306
+      - DB_NAME=cstrike
+      - DB_USER=root
+      - DB_PASSWORD=change-me
     stdin_open: true
     tty: true
