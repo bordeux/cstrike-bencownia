@@ -20,7 +20,6 @@ services:
       - SERVER_ENVIRONMENT=${SERVER_ENVIRONMENT:-production}
     stdin_open: true
     tty: true
-    user: "steam"
     volumes:
       - cstrike-persistent:/opt/steam/persistent
 
