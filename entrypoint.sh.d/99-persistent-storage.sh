@@ -12,7 +12,7 @@ persistent_dir() {
         echo "❌ Usage: link_logs <source_dir> <destination_dir>"
         return 1
     fi
-    DST="${PERSISTENT_STORAGE}/${DST}"
+    DST="${PERSISTENT_STORAGE}${DST}"
 
     # Create destination directory if it does not exist
     if [[ ! -d "$DST" ]]; then
@@ -41,6 +41,16 @@ persistent_dir() {
         echo "🗑️  Removing source path: $SRC"
         rm -rf "$SRC" || {
             echo "❌ ERROR: Failed to remove source directory"
+            return 1
+        }
+    fi
+
+    # Ensure parent directory of source exists
+    local SRC_PARENT=$(dirname "$SRC")
+    if [[ ! -d "$SRC_PARENT" ]]; then
+        echo "📁 Creating parent directory: $SRC_PARENT"
+        mkdir -p "$SRC_PARENT" || {
+            echo "❌ ERROR: Failed to create parent directory"
             return 1
         }
     fi
