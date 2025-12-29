@@ -47,6 +47,7 @@ jobs:
         id: deploy-tag
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          BRANCH_NAME=${BRANCH_NAME//\//-}
           echo "tag=${BRANCH_NAME}-${{ github.run_number }}" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
