@@ -67,6 +67,7 @@ jobs:
           else
             echo "name=bencownia-staging" >> $GITHUB_OUTPUT
           fi
+
       - name: 'Portainer Deploy'
         uses: cssnr/portainer-stack-deploy-action@v1
         with:
