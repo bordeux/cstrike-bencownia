@@ -68,13 +68,11 @@ jobs:
             echo "name=bencownia-staging" >> $GITHUB_OUTPUT
           fi
 
-      - name: Deploy to Portainer
-        uses: carlrygart/portainer-stack-deploy@v1.3.0
+      - name: 'Portainer Deploy'
+        uses: cssnr/portainer-stack-deploy-action@v1
         with:
-          portainer-host: ${{ secrets.PORTAINER_URL }}
-          username: ${{ secrets.PORTAINER_USERNAME }}
-          password: ${{ secrets.PORTAINER_PASSWORD }}
-          stack-name: ${{ steps.stack.outputs.name }}
-          stack-definition: docker-compose.stack.yml
-          template-variables: '{"IMAGE_TAG": "${{ steps.deploy-tag.outputs.tag }}"}'
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.deploy-tag.outputs.tag }}
+          token: ${{ secrets.PORTAINER_TOKEN }}
+          url: ${{ secrets.PORTAINER_URL }}
+          name: ${{ steps.stack.outputs.name }}
+          file: docker-compose.stack.yml
+          type: file
