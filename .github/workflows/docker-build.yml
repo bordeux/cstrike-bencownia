@@ -69,12 +69,13 @@ jobs:
           fi
 
       - name: Deploy to Portainer
-        uses: kgierke/portainer-stack-deployment@v1
+        uses: bots-house/portainer-deploy-stack-action@v1.1.0
         with:
           portainer-url: ${{ secrets.PORTAINER_URL }}
           portainer-username: ${{ secrets.PORTAINER_USERNAME }}
           portainer-password: ${{ secrets.PORTAINER_PASSWORD }}
-          portainer-endpoint: 2
-          name: ${{ steps.stack.outputs.name }}
-          file: docker-compose.stack.yml
-          variables: '{"IMAGE_TAG": "${{ steps.deploy-tag.outputs.tag }}"}'
+          portainer-endpoint: 3
+          stack-name: ${{ steps.stack.outputs.name }}
+          stack-file: docker-compose.stack.yml
+          stack-vars: |
+            IMAGE_TAG: whoami.${{ steps.deploy-tag.outputs.tag }}
