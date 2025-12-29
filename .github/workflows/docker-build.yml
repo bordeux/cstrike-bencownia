@@ -69,7 +69,7 @@ jobs:
           fi
 
       - name: Deploy to Portainer
-        uses: nvti/portainer-stack-deploy@v1
+        uses: nvti/portainer-stack-deploy
         with:
           portainer-host: ${{ secrets.PORTAINER_URL }}
           username: ${{ secrets.PORTAINER_USERNAME }}
