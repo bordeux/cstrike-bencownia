@@ -67,7 +67,6 @@ jobs:
           else
             echo "name=bencownia-staging" >> $GITHUB_OUTPUT
           fi
-
       - name: 'Portainer Deploy'
         uses: cssnr/portainer-stack-deploy-action@v1
         with:
@@ -77,3 +76,6 @@ jobs:
           file: docker-compose.stack.yml
           type: file
           standalone: true
+          env_data: |
+            IMAGE_TAG: ${{ steps.deploy-tag.outputs.tag }}
+          merge_env: true
