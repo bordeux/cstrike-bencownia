@@ -1,7 +1,7 @@
 #!/bin/bash
 # Links folders to persistent storage
 
-PERSISTENT_STORAGE=/opt/steam/persistent/data
+PERSISTENT_STORAGE=/storage/data
 
 
 persistent_dir() {

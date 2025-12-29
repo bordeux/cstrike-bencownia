@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.description="Counter Strike 1.6 for Bencownia.com
 LABEL org.opencontainers.image.source=https://github.com/bordeux/cstrike-bencownia
 
 USER root
-RUN mkdir -p /opt/steam/persistent/data && chown -R steam:steam /opt/steam/persistent
+RUN mkdir -p /storage/data && chown -R steam:steam /storage
 USER steam
 
 COPY ./entrypoint.sh.d /usr/bin/entrypoint.sh.d
