@@ -22,7 +22,7 @@ services:
     tty: true
     user: "steam"
     volumes:
-      - cstrike-persistent:/var/log/
+      - cstrike-persistent:/opt/steam/persistent
 
 volumes:
   cstrike-persistent:
