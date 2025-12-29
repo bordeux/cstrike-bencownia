@@ -41,14 +41,13 @@ jobs:
           tags: |
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || github.event_name == 'schedule' }}
             type=ref,event=branch,enable=${{ github.ref != 'refs/heads/main' && github.event_name != 'schedule' }},suffix=,value={{branch}}
-            type=sha,prefix={{branch}}-,format=short
+            type=raw,value={{branch}}-${{ github.run_number }}
 
       - name: Set deployment tag
         id: deploy-tag
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
-          echo "tag=${BRANCH_NAME}-${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "tag=${BRANCH_NAME}-${{ github.run_number }}" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
