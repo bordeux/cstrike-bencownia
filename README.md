@@ -28,7 +28,6 @@ docker-compose -f docker-compose.dev.yml up -d
 The server will be available on:
 - Game Port: `27015` (UDP/TCP)
 - Web Admin: `8080` (TCP)
-- phpMyAdmin: `http://127.0.0.1:8081/`
 
 ## Configuration
 
@@ -62,8 +61,7 @@ The server includes AMX Mod X with:
 ```
 cstrike-bencownia/
 ├── .docker/                    # Docker volumes and data
-│   ├── cstrike_workdir/       # Server working directory (volume)
-│   └── mysql_data/            # MySQL database data (development)
+│   └── cstrike_workdir/       # Server working directory (volume)
 ├── cstrike/                    # Server files and customizations
 │   ├── addons/
 │   │   └── amxmodx/           # AMX Mod X plugins and configs
@@ -115,8 +113,6 @@ In Counter-Strike 1.6:
 - For macOS M-series chips, CPU_MHZ is set to 2400
 - Custom content is mounted from `./cstrike` to `/opt/steam/hlds/cstrike_overwrites`
 - Server working directory is persisted in `./.docker/cstrike_workdir`
-- MySQL database data is stored in `./.docker/mysql_data` (development only)
-- Access phpMyAdmin at `http://127.0.0.1:8081/` for database management
 
 ## Base Image
 
