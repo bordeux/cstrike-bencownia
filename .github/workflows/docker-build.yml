@@ -76,3 +76,4 @@ jobs:
           name: ${{ steps.stack.outputs.name }}
           file: docker-compose.stack.yml
           type: file
+          standalone: true
