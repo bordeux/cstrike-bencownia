@@ -77,3 +77,4 @@ jobs:
           stack-name: ${{ steps.stack.outputs.name }}
           stack-definition: docker-compose.stack.yml
           template-variables: '{"IMAGE_TAG": "${{ steps.deploy-tag.outputs.tag }}"}'
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.deploy-tag.outputs.tag }}
