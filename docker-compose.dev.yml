@@ -1,6 +1,6 @@
 services:
   cstrike-mysql:
-    image: mysql:9.0
+    image: mariadb:latest
     container_name: mysql_db
     restart: unless-stopped
     environment:
@@ -10,6 +10,22 @@ services:
       - "3306:3306"
     volumes:
       - ./.docker/mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: cstrike-mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: change-me
+      PMA_ARBITRARY: 0
+    depends_on:
+      - cstrike-mysql
+
 
   cstrike-bencownia:
     image: ghcr.io/bordeux/cstrike-server:latest
@@ -38,3 +54,5 @@ services:
       - DB_PASSWORD=change-me
     stdin_open: true
     tty: true
+    depends_on:
+      - cstrike-mysql
