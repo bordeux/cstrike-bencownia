@@ -69,12 +69,12 @@ jobs:
           fi
 
       - name: Deploy to Portainer
-        uses: nvti/portainer-stack-deploy
+        uses: kgierke/portainer-stack-deployment@v1
         with:
           portainer-host: ${{ secrets.PORTAINER_URL }}
-          username: ${{ secrets.PORTAINER_USERNAME }}
-          password: ${{ secrets.PORTAINER_PASSWORD }}
-          stack-name: ${{ steps.stack.outputs.name }}
-          stack-definition: docker-compose.stack.yml
-          template-variables: '{"IMAGE_TAG": "${{ steps.deploy-tag.outputs.tag }}"}'
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.deploy-tag.outputs.tag }}
+          portainer-username: ${{ secrets.PORTAINER_USERNAME }}
+          portainer-password: ${{ secrets.PORTAINER_PASSWORD }}
+          portainer-endpoint: 2
+          name: ${{ steps.stack.outputs.name }}
+          file: docker-compose.stack.yml
+          variables: '{"IMAGE_TAG": "${{ steps.deploy-tag.outputs.tag }}"}'
