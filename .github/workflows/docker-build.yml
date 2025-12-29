@@ -78,6 +78,8 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref != 'refs/heads/main')
+    environment:
+      name: staging
 
     steps:
       - name: Checkout repository
