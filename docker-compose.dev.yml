@@ -52,6 +52,7 @@ services:
       - DB_NAME=cstrike
       - DB_USER=root
       - DB_PASSWORD=change-me
+      - SERVER_ENVIRONMENT=dev
     stdin_open: true
     tty: true
     depends_on:
