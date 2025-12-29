@@ -21,7 +21,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - cstrike-persistent:/opt/steam/persistent
+      - cstrike-persistent:/storage
 
 volumes:
   cstrike-persistent:

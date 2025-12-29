@@ -64,7 +64,7 @@ persistent_dir() {
     echo "✅ Symlink created successfully: $SRC -> $DST"
 }
 
-persistent_dir ${CSTRIKE_PATH}/addons/logs /amxmod_logs
-persistent_dir ${CSTRIKE_PATH}/yapb/logs /yapb_logs
-persistent_dir ${CSTRIKE_PATH}/yapb/train /yapb_train
+persistent_dir ${CSTRIKE_PATH}/addons/amxmodx/logs /amxmod_logs
+persistent_dir ${CSTRIKE_PATH}/addons/yapb/logs /yapb_logs
+persistent_dir ${CSTRIKE_PATH}/addons/yapb/train /yapb_train
 persistent_dir ${CSTRIKE_PATH}/logs /hlds_logs
