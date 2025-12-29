@@ -74,7 +74,6 @@ jobs:
           portainer-host: ${{ secrets.PORTAINER_URL }}
           username: ${{ secrets.PORTAINER_USERNAME }}
           password: ${{ secrets.PORTAINER_PASSWORD }}
-          endpoint-id: 3
           stack-name: ${{ steps.stack.outputs.name }}
           stack-definition: docker-compose.stack.yml
           template-variables: '{"IMAGE_TAG": "${{ steps.deploy-tag.outputs.tag }}"}'
