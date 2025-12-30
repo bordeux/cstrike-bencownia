@@ -10,7 +10,7 @@
 #define VERSION "0.1"
 #define AUTHOR "bordeux"
 
-new const sound[] = "bencownia/papaj_pb.wav"
+new const sound[] = "bencownia/papaj_bp.wav"
 
 public plugin_init()
 {
