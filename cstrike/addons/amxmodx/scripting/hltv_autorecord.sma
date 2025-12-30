@@ -10,7 +10,7 @@ new bool:g_challenging_rcon, g_autodelay_cvar
 
 public plugin_init()
 {
-	register_plugin("HLTV AutoRecord", "1.7", "Dr.Aft")
+	register_plugin("HLTV AutoRecord", "1.8", "Dr.Aft")
 	g_hltvrec_cvar = register_cvar("autohltv_record", "1")	// uruchom plugin
 	
 	// nagrywanie do cstrike/demos/HLTV-datetime.dem
