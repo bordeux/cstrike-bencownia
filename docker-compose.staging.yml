@@ -1,6 +1,6 @@
 services:
   cstrike-bencownia:
-    image: ghcr.io/bordeux/cstrike-bencownia:feature-fix-rs-91
+    image: ghcr.io/bordeux/cstrike-bencownia:feature-fix-rs-92
     platform: linux/amd64
     restart: unless-stopped
     ports:
