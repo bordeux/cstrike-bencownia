@@ -1,6 +1,6 @@
 services:
   cstrike-bencownia:
-    image: ghcr.io/bordeux/cstrike-bencownia:feature-fix-rs-98
+    image: ghcr.io/bordeux/cstrike-bencownia:${IMAGE_TAG:-latest}
     platform: linux/amd64
     restart: unless-stopped
     ports:
