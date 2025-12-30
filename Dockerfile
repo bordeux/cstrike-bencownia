@@ -10,5 +10,6 @@ USER steam
 COPY ./entrypoint.sh.d /usr/bin/entrypoint.sh.d
 ENV AMXMODX_AUTOCOMPILE=1
 ENV HLTV_ENABLE=1
-COPY --chown=steam:steam ./cstrike ${CSTRIKE_PATH}
+ENV DEBUG=1
+COPY --chown=steam:steam ./cstrike ${CSTRIKE_BASE_PATH}
 
