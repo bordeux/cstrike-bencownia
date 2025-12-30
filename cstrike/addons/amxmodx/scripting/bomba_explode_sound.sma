@@ -30,8 +30,8 @@ Remeber : if until explode remains less than 8 seconds, hudmessage color will be
 //
 // KONFIGURACJA TUTAJ
 //
-#define muzyczka "sound/misc/bomba.wav"
-#define czas 10
+#define BES_SOUND_FILE "bencownia/bomba.wav"
+#define BES_TIME 10
 //
 
 //
@@ -98,14 +98,14 @@ public dispTime() {
       set_hudmessage(0, 150, 0, -1.0, 0.80, 0, 1.0, 1.0, 0.01, 0.01, -1);
     } else if (g_c4timer > 7) {
       set_hudmessage(150, 150, 0, -1.0, 0.80, 0, 1.0, 1.0, 0.01, 0.01, -1);
-      if (g_c4timer == czas) {
-        client_cmd(0, "spk %s", muzyczka)
+      if (g_c4timer == BES_TIME) {
+        client_cmd(0, "spk %s", BES_SOUND_FILE)
       }
     } else {
       set_hudmessage(150, 0, 0, -1.0, 0.80, 0, 1.0, 1.0, 0.01, 0.01, -1);
     }
 
-    ShowSyncHudMsg(0, g_msgsync, "C4: %d", g_c4timer);
+    ShowSyncHudMsg(0, g_msgsync, "Bomba pierdyknie za %d", g_c4timer);
 
     --g_c4timer;
   }
@@ -113,7 +113,6 @@ public dispTime() {
 }
 
 public plugin_precache() {
-  precache_sound("misc/bomba.wav")
-
+  precache_sound(BES_SOUND_FILE)
   return PLUGIN_CONTINUE
 }

@@ -23,7 +23,7 @@
 #include <hamsandwich>
 
 /*-------------DONT CHANGE-------------*/
-#define PLUGIN "WarmUP Pro Becnownia"
+#define PLUGIN "WarmUP Pro Bencownia"
 #define VERSION "5.6 Beta"
 #define AUTHOR "ReymonARG"
 /*-------------DONT CHANGE-------------*/
