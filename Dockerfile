@@ -4,15 +4,16 @@ LABEL org.opencontainers.image.description="Counter Strike 1.6 for Bencownia.com
 LABEL org.opencontainers.image.source=https://github.com/bordeux/cstrike-bencownia
 
 USER root
-RUN mkdir -p /storage/data && chown -R steam:steam /storage
-USER steam
+RUN mkdir -p /storage/data && chown -R steam:steam /storage && \
+   mv ${CSTRIKE_BASE_PATH} ${CSTRIKE_PATH} && echo '1' > ${CSTRIKE_PATH}/.installed && \
+   chown -R steam:steam ${CSTRIKE_PATH}
 
+USER steam
 COPY ./entrypoint.sh.d /usr/bin/entrypoint.sh.d
 
 ENV AMXMODX_AUTOCOMPILE=0
 ENV HLTV_ENABLE=1
 
-RUN mv ${CSTRIKE_BASE_PATH} ${CSTRIKE_PATH} && echo '1' > ${CSTRIKE_PATH}/.installed
 
 COPY ./cstrike ${CSTRIKE_PATH}
 RUN ${HELPERS_PATH}/amxmodx-compile.sh ${CSTRIKE_PATH}/addons/amxmodx
