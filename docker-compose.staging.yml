@@ -1,0 +1,19 @@
+services:
+  cstrike-bencownia:
+    image: ghcr.io/bordeux/cstrike-bencownia:latest
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "27015:27015/udp"
+      - "27015:27015/tcp"
+      - "8080:8080/tcp"
+    environment:
+      - CPU_MHZ=2400 # enable this on MacOS M chips
+      - SERVER_PORT=27030
+      - SERVER_ENVIRONMENT=staging
+      - HTTP_SERVER_PORT=8081
+      - SERVER_MAX_PLAYERS=12
+      - RCON_PASSWORD=change-me
+
+    stdin_open: true
+    tty: true
