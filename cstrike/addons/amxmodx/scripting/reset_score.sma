@@ -21,4 +21,5 @@ public reset_score(id)
 	set_user_frags(id, 0)
 	cs_set_user_deaths(id, 0)
 	set_user_frags(id, 0)
+	client_print(id, print_chat, "Statystyki wyczyszczone");
 }
