@@ -5,13 +5,10 @@ LABEL org.opencontainers.image.source=https://github.com/bordeux/cstrike-bencown
 
 USER root
 RUN mkdir -p /storage/data && chown -R steam:steam /storage
+
 USER steam
-
 COPY ./entrypoint.sh.d /usr/bin/entrypoint.sh.d
-RUN mv ${CSTRIKE_BASE_PATH} ${CSTRIKE_PATH} && touch ${CSTRIKE_PATH}/.installed
-
-ENV AMXMODX_AUTOCOMPILE=0
+ENV AMXMODX_AUTOCOMPILE=1
 ENV HLTV_ENABLE=1
 COPY --chown=steam:steam ./cstrike ${CSTRIKE_PATH}
 
-RUN ${HELPERS_PATH}/amxmodx-compile.sh ${CSTRIKE_PATH}/addons/amxmodx
