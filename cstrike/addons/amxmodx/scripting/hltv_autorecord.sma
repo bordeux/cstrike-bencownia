@@ -1,96 +1,40 @@
-/*
-	HLTV AutoRecord, v1.7 (by Dr.Aft)
-
-Description:
-	This is a simple and usefull plugin designed for servers, that want to use autorecording hltv,
-	but dont want to have empty demos when there are no players (at night, for example).
-	So, when hltv is connected, plugin will check minimal amount of players defined by 
-	the cvar and if it is not recording, it will start record.
-	When the amount of players is lower than this cvar, hltv stops recording.
-	You can also define the path, where the demo will be stored.
-
-Note:
-	1. If u have 2 or more HLTV in server, the only first connected will record.
-	2. To enable plugin without reading this flood about cvars just do:
-	2.1 Create cstrike/demos folder.
-	2.2 Find hltv.cfg and change adminpassword "hltvadminpass"
-	2.3 Add hltv_autorecord.amxx into cstrike/addons/configs/plugins.ini
-
-Cvars:
-	autohltv_record 1 - enables autorecording
-	autohltv_path "demos/HLTV" - it means, that you will have "cstrike/demos/HLTV-12389034.dem". If you want to put the demos into ctrike folder, just make this cvar empty.
-	autohltv_ignorebots 1 - ignore bots as real players, it means that plugin will not count them at all (look next cvar). If you have bots, then change this cvar to 0 and change map on the server (or restart).
-	autohltv_minplayers 2 - minimum number of players in game to start recording hltv
-	autohltv_pass "hltvadminpass" - the pass to control hltv. Go to the hltv.cfg and find adminpassword there. Now you can change it to this or any other that you define by this cvar.
-	autohltv_recording 1|0 - automatic cvar, dont touch it if you dont know what you do. You can use it in server monitoring to find whether hltv is recording or not.
-	autohltv_time 0|1|2, 2 is default. 0 - no timer show as hudmessage. 1 - timer only for hltv. 2 - for all players. This may be usefull to set 2 for public servers, because it is not bad to know every second what the time is and you can use 1 for showing the time only for hltv, so you will see it in hltv demo and check the real time and match with time in your logs.
-	autohltv_delay 30.0 - delay should be equal to delay in hltv.cfg (director.cfg) of HLTV-server configuration file.
-
-Required modules:
-	<sockets>
-
-Credits:
-	Infra
-
-Changelog:
-	1.7 - major update and added "autohltv_delay 30.0" cvar
-	1.6 - update of this plugin (final fix versus server crashing).
-	1.5 - Final fix versus server crash and added time showing feature for hltv or for all players set by default (configured by the cvar - read above). This will work as soon, as hltv is connected to server (so do not expect any if you dont have hltv)
-	1.3 - Fix versus server crashing (hope, the last one)
-	1.2 - Fix versus server crashing
-	1.1 - Fix versus server crash and added cvar for announcing, that hltv is recording.
-	1.0 - Initial release.
-
-p.s. For hltv correct storage, there is php script in russian language. To correctly split demo name, use the autohltv_path "demos/HLTV" or just "HLTV". Credits to One, Timmy and a little bit for me
-
-p.p.s Arch.php.gz is a crontab-usage php-script if you have hltv server and web-server on the same machine. It will automatically compress the demos into zip and put them from your hlds/cstrike/demos/server1 folder into /srv/http/demos/server1 (i mean, to your http path). Before using change the pathes inside the script. After it is ready, simply create a file, for example, "cron_demos"
-
-	SHELL=/bin/bash
-	0-59 * * * * php /path_to_arch.php/arch.php
-
-and execute
-
-	crontab cron_demos
-
-*/
-
-#include <amxmod>
+#include <amxmodx>
 #include <sockets>
 
 #define TIMER_TASK 32490283094
 
 new g_hltv_id, g_realplayersnum, g_hltv_recording, g_hltv_ip[16], g_hltv_port, g_ignorebots, bool:g_mapchange
 new g_hltvrec_cvar, g_hltvpath_cvar, g_minplayers_cvar, g_hltvpassword_cvar, g_ignorebots_cvar, g_recording_cvar	//, g_challenge_cvar
-new g_hltv_challenge[13], g_show_time	// Contains the hltv rcon challenge number
+new g_hltv_challenge[13], g_show_time	// Zawiera numer zadania rcon HLTV
 new bool:g_challenging_rcon, g_autodelay_cvar
 
 public plugin_init()
 {
 	register_plugin("HLTV AutoRecord", "1.7", "Dr.Aft")
-	g_hltvrec_cvar = register_cvar("autohltv_record", "1")	// enable plugin
+	g_hltvrec_cvar = register_cvar("autohltv_record", "1")	// uruchom plugin
 	
-	// recording will be into cstrike/demos/HLTV-datetime.dem
+	// nagrywanie do cstrike/demos/HLTV-datetime.dem
 	g_hltvpath_cvar = register_cvar("autohltv_path", "demos/HLTV")	
 
-	// ignore bots as real players
+	// ignoruj boty, jako prawdziwych graczy
 	g_ignorebots_cvar = register_cvar("autohltv_ignorebots", "1")
-	g_ignorebots = get_cvarptr_num(g_ignorebots_cvar)
+	g_ignorebots = get_pcvar_num(g_ignorebots_cvar)
 	
-	// minimal players to start record, when it will be 1 player, recording will be stopped
+	// minimalna liczba graczy do rozpoczÍcia nagrywania, jeúli bÍdzie 1 gracz, nagrywanie zostanie zatrzymane
 	g_minplayers_cvar = register_cvar("autohltv_minplayers", "2")
 	
-	// This is fix if hltv is already recording, server can crash if we send the socket command again
+	// Fix bugu - Jeúli HLTV juø nagrywa, serwer siÍ wy≥aczy jeúli wyúlemy ponownie komende socket 
 	g_recording_cvar = register_cvar("autohltv_recording", "0", FCVAR_SERVER|FCVAR_SPONLY)
-	if(get_cvarptr_num(g_recording_cvar))
+	if(get_pcvar_num(g_recording_cvar))
 		g_hltv_recording = 4
 	
 	//g_challenge_cvar = register_cvar("autohltv_challenge", "", FCVAR_SPONLY|FCVAR_PROTECTED|FCVAR_UNLOGGED)
 	
-	// adminpassword for hltv
+	// adminpassword dla hltv
 	g_hltvpassword_cvar = register_cvar("autohltv_pass", "hltvadminpass")
 	g_autodelay_cvar = register_cvar("autohltv_delay", "30.0")
 	
-	register_cvar("autohltv_time", "2")		// 2 - time for everyone, 1 - only to hltv, 0 - disabled
+	register_cvar("autohltv_time", "2")		// 2 - czas dla wszystkich 1 - tylko hltv, 0 - wy≥πczony
 	switch(get_cvar_num("autohltv_time"))
 	{
 		case 0:	g_show_time = -2
@@ -103,11 +47,11 @@ public plugin_init()
 public client_putinserver(id)
 {
 	if(g_mapchange)
-		return
+		return PLUGIN_CONTINUE
 	
 	if(is_user_bot(id))
 		if(g_ignorebots)
-			return
+			return PLUGIN_CONTINUE
 		
 	if(is_user_hltv(id))	
 	{
@@ -137,9 +81,9 @@ public client_putinserver(id)
 	
 	if(g_hltv_id > 0)
 	{
-		if(g_realplayersnum >= get_cvarptr_num(g_minplayers_cvar))
+		if(g_realplayersnum >= get_pcvar_num(g_minplayers_cvar))
 		{
-			if(get_cvarptr_num(g_hltvrec_cvar) && g_hltv_recording < 3)
+			if(get_pcvar_num(g_hltvrec_cvar) && g_hltv_recording < 3)
 			{
 				set_task(1.0, "hltv_start_record")				
 				g_hltv_recording = 3
@@ -147,6 +91,7 @@ public client_putinserver(id)
 		}
 		
 	}
+	return PLUGIN_CONTINUE
 }
 
 public client_disconnect(id)
@@ -170,8 +115,8 @@ public client_disconnect(id)
 
 public flush_hltv()
 {
-	//set_cvarptr_string(g_challenge_cvar, "^0")
-	set_cvarptr_num(g_recording_cvar, 0)
+	//set_pcvar_string(g_challenge_cvar, "^0")
+	set_pcvar_num(g_recording_cvar, 0)
 	g_hltv_recording = 0
 	g_hltv_challenge = ""
 	
@@ -187,7 +132,7 @@ public flush_hltv()
 public check_stop_record()
 {
 	if(g_hltv_recording == 4 && !g_mapchange)
-			if(g_realplayersnum < get_cvarptr_num(g_minplayers_cvar))
+			if(g_realplayersnum < get_pcvar_num(g_minplayers_cvar))
 			{
 				set_task(1.0, "hltv_stop_record")
 				g_hltv_recording = 1
@@ -198,11 +143,11 @@ public check_stop_record()
 public hltv_start_record()
 {
 	new record_string[90]
-	hltv_rcon_command("say [HLTV] Starting record...")
-	get_cvarptr_string(g_hltvpath_cvar, record_string, 80)	
+	hltv_rcon_command("say [HLTV] Rozpoczynam nagrywanie .")
+	get_pcvar_string(g_hltvpath_cvar, record_string, 80)	
 	format(record_string, 90, "record %s", record_string)	
-	if(get_cvarptr_float(g_autodelay_cvar) > 5.0)
-		set_task(get_cvarptr_float(g_autodelay_cvar) - 5.0, "hltv_rcon_command", 0, record_string, strlen(record_string))
+	if(get_pcvar_float(g_autodelay_cvar) > 5.0)
+		set_task(get_pcvar_float(g_autodelay_cvar) - 5.0, "hltv_rcon_command", 0, record_string, strlen(record_string))
 	else
 		hltv_rcon_command(record_string)
 }
@@ -211,32 +156,32 @@ public hltv_start_record()
 public hltv_stop_record()
 {	
 	hltv_rcon_command("stoprecording")		
-	hltv_rcon_command("say [HLTV] Stopped recording...")
+	hltv_rcon_command("say [HLTV] Nagrywanie zatrzymane .")
 }
 
 public hltv_rcon_command(hltv_command[])
 {
-	// Declare variables
-	new socket_address		// Contains the socket address of the hltv server 
-	new socket_error = 0	// Contains the error code of the socket connection
+	// Deklarowanie zmiennych
+	new socket_address		// Zawiera adres socketa z HLTV
+	new socket_error = 0	// Zawiera kod b≥Ídu z po≥πczenia socket
 	
 	
-	new send[256]			// Contains the send socket command	
+	new send[256]			// Zawiera komendÍ wys≥anπ przez socket
 	
 	
 	new hltv_password[20]	//, hltv_challenge[15]
 			
-	// Set hltv rcon password
-	get_cvarptr_string(g_hltvpassword_cvar, hltv_password, 19)
+	// Ustaw has≥o rcon HLTV
+	get_pcvar_string(g_hltvpassword_cvar, hltv_password, 19)
 		
-	// Connect to the HLTV Proxy
+	// Po≥πcz z Proxy HLTV 
 	socket_address = socket_open(g_hltv_ip, g_hltv_port, SOCKET_UDP, socket_error)
 		
 	if (socket_error != 0)
-		return server_print("HLTV AutoRecord: HLTV connection failure...", socket_error)
+		return server_print("Niepowodzenie polaczenia z HLTV .", socket_error)
 		
-	// Send challenge rcon and receive response
-	// Do NOT add spaces after the commas, you get an error about invalid function call
+	// Wyslij komende rcon i czekaj na odpowiedz
+	// NIE dodawaj spacji po przecinkach, bo otrzymasz blad blednego wywolania funkcji.
 	
 	if(equali(g_hltv_challenge, ""))
 	{
@@ -246,7 +191,7 @@ public hltv_rcon_command(hltv_command[])
 			copy(send[4], 255, "challenge rcon")
 			setc(send[28], 1, '^n')
 			
-			socket_send(socket_address, send, 255)
+			socket_send2(socket_address, send, 255)	
       
 			set_task(2.0, "hltv_challenge_receive", socket_address)
 			g_challenging_rcon = true
@@ -257,14 +202,14 @@ public hltv_rcon_command(hltv_command[])
 	{	
 		replace(g_hltv_challenge, 255, "^n", "")
 		
-		// Set rcon command
+		// Ustaw komende rcon
 		setc(send, 255, 0x00)
 		setc(send, 4, 0xff)
 		
 		log_amx("hltv_command: %s", hltv_command)
 		formatex(send[4], 255, "rcon %s %s %s ^n", g_hltv_challenge, hltv_password, hltv_command)
 		log_amx("sending: %s", send)
-		socket_send(socket_address, send, 255)
+		socket_send2(socket_address, send, 255)
 		socket_close(socket_address)
 				
 		switch(hltv_command[0])
@@ -274,19 +219,19 @@ public hltv_rcon_command(hltv_command[])
 				if(g_show_time > -2)
 					set_task(1.0, "hltv_show_time", TIMER_TASK, _, _, "b")
 				g_hltv_recording = 4
-				set_cvarptr_num(g_recording_cvar, 1)	
+				set_pcvar_num(g_recording_cvar, 1)	
 			}
 			case 's':		
 			{
 				remove_task(str_to_num(g_hltv_challenge))
 				g_hltv_recording = 0
-				set_cvarptr_num(g_recording_cvar, 0)
+				set_pcvar_num(g_recording_cvar, 0)
 			}
 		}
 			
 		socket_close(socket_address)
 	}
-	return 0
+	return PLUGIN_CONTINUE
 }
 	
 
@@ -294,7 +239,8 @@ public hltv_challenge_receive(socket_address)
 {
 	if(socket_change(socket_address))
 	{
-		remove_task(socket_address)
+		if(task_exists(socket_address))
+			remove_task(socket_address)
 		new receive[255]	
 		socket_recv(socket_address, receive, 255)
 		copy(g_hltv_challenge, 12, receive[19])
@@ -307,7 +253,7 @@ public hltv_challenge_receive(socket_address)
 		socket_close(socket_address)
 		socket_address = socket_open(g_hltv_ip, g_hltv_port, SOCKET_UDP, socket_error)
 		if(socket_error > 0)
-			log_amx("HLTV AutoRecord: HLTV not responding...")
+			log_amx("Nie znaleziono HLTV .")
 		else
 		{
 			if(!task_exists(socket_address))
@@ -316,7 +262,7 @@ public hltv_challenge_receive(socket_address)
 				copy(send[4], 255, "challenge rcon")
 				setc(send[28], 1, '^n')
 
-				socket_send(socket_address, send, 255)	
+				socket_send2(socket_address, send, 255)	
 				set_task(1.0, "hltv_challenge_receive", socket_address)
 			}
 		}
@@ -341,7 +287,8 @@ public hltv_show_time()
 
 public prepare_for_mapchange()
 {
-	remove_task(TIMER_TASK)
+	if(task_exists(TIMER_TASK))
+		remove_task(TIMER_TASK)
 }
 
 
