@@ -2,7 +2,7 @@
 
 #include <amxmodx>
 #include <amxmisc>
-#include <ColorChat>
+#include <colorchat>
 
 #define PLUGIN "RoundSound"
 #define VERSION "2.1"
