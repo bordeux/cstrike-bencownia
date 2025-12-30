@@ -19,7 +19,6 @@ public plugin_init()
 
 public bomb_planted()
 {
-	client_cmd(0, "stopsound")
 	client_cmd(0, "spk %s", sound)
 }
 
