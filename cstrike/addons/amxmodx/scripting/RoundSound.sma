@@ -53,9 +53,7 @@ new const g_CvarValue[][]={
 };
 
 new const g_LangCmd[][]={
-	"say /rs",
-	"say /roundsound",	
-	"say_team /rs",
+	"say /roundsound",
 	"say_team /roundsound"
 };
 
@@ -411,7 +409,7 @@ public ShowAds(){
 		if(is_user_connected(i) && g_ShowAds[i]){
 			switch(random(4)){
 				case 0:{
-					ColorChat(i, TEAM_COLOR, "[%s]^x04 Chcesz %s roundsound? Napisz^x03 /roundsound ^x04lub^x03 /rs", g_Prefix, g_RoundSound[i] ? "wylaczyc" : "wlaczyc");
+					ColorChat(i, TEAM_COLOR, "[%s]^x04 Chcesz %s roundsound? Napisz^x03 /roundsound", g_Prefix, g_RoundSound[i] ? "wylaczyc" : "wlaczyc");
 				}
 				case 1:{
 					if(g_ShowPlaylist){
@@ -419,10 +417,10 @@ public ShowAds(){
 					}
 				}
 				case 2:{
-					ColorChat(i, TEAM_COLOR, "[%s]^x04 Chcesz posluchac utworow CT / TT? Napisz^x03 /roundsound ^x04lub^x03 /rs", g_Prefix);
+					ColorChat(i, TEAM_COLOR, "[%s]^x04 Chcesz posluchac utworow CT / TT? Napisz^x03 /roundsound", g_Prefix);
 				}
 				case 3:{
-					ColorChat(i, TEAM_COLOR, "[%s]^x04 Chcesz wylaczyc reklamy? Napisz^x03 /roundsound ^x04lub^x03 /rs", g_Prefix);
+					ColorChat(i, TEAM_COLOR, "[%s]^x04 Chcesz wylaczyc reklamy? Napisz^x03 /roundsound", g_Prefix);
 				}
 			}
 		}
