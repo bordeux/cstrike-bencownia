@@ -20,8 +20,8 @@ public TASK_SetBotsNumber()
 	
 	g_TotalBotsNumber = g_EstimateBotsNumber * 2
 
-	if(g_TotalBotsNumber > 6) {
-	    g_TotalBotsNumber = 6
+	if(g_TotalBotsNumber > 4) {
+	    g_TotalBotsNumber = 4
 	}
 	
 	if (get_pcvar_num(g_cvar_force_bots)) { 
