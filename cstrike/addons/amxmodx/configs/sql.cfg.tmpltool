@@ -8,11 +8,11 @@
 
 // *NOTE* amx_sql_type specifies the DEFAULT database type which admin.sma will use.
 
-amx_sql_host    "{{ get_env(name="DB_HOST") }}"
-amx_sql_port    "{{ get_env(name="DB_PORT") }}"
-amx_sql_user    "{{ get_env(name="DB_USER") }}"
-amx_sql_pass    "{{ get_env(name="DB_PASSWORD") }}"
-amx_sql_db      "{{ get_env(name="DB_NAME") }}"
+amx_sql_host    "{{ get_env(name="DB_HOST", default="fill-db-host") }}"
+amx_sql_port    "{{ get_env(name="DB_PORT", default="3306") }}"
+amx_sql_user    "{{ get_env(name="DB_USER", default="fill-db-user") }}"
+amx_sql_pass    "{{ get_env(name="DB_PASSWORD", default="fill-db-password") }}"
+amx_sql_db      "{{ get_env(name="DB_NAME"), default="fill-db-name" }}"
 amx_sql_table   "amxx_admins"
 amx_sql_type    "mysql"
 amx_sql_timeout "60"
