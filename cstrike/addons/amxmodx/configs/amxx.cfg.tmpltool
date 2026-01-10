@@ -189,7 +189,7 @@ amx_mldebug ""
 
 // Rank mode
 // 0 - by nick
-// 1 - by authid 
+// 1 - by authid
 // 2 - by ip
 //
 // Default value: 1
@@ -260,7 +260,7 @@ semiclip_unstuckdelay 0.1 // Opóźnienie z odblokowaniem gracza [ 0 - Od Razu] 
 semiclip_button 0 // Przycisk Przyśpieszający Semiclip ) [0 - Wyłączony / 1 - Teroo / 2 -CT / 3 - Wszyscy]
 semiclip_knife_trace 0 // Ataki nożem dosiegają gracza nabliżej stojącego jeśli stoimy w Kimś [0 - Wyłącz / 1 - Włącz]
 semiclip_duration 0 // Czy plugin ma działać tylko na początku rundy [0 - Wyłączony / 1 - Włączony]
-    
+
 // Ustawienia Rendera
 // -----
 semiclip_render 0 // Czy niestandardowe opcje renderowania mają być włączone [0 - Wyłączone / 1 - Włączone]
@@ -271,7 +271,7 @@ semiclip_renderradius 250 // Jaki mocny ma mieć zasięg rendera [?? - 4095]
 semiclip_renderfade 0 // Czy ma być włączona poświata dodatkowa [0 - Wyłączone / 1 - Włączone]
 semiclip_renderfademin 25 // Minimalna wartość Render Fade [0 - 200]
 semiclip_renderfadespec 1 // Czy Render Face ma być włączone dla obserwatorów [0 - Wyłączone / 1 - Włączone]
-   
+
 
 // Kolor poświaty
 // -----
@@ -349,7 +349,7 @@ voteban_type 4 // typ banowania , 4-amxbans
 voteban_time 240 // czas bana w minutach , 0 - na zawsze
 voteban_log 1 // zapisywanie logów w pliku, 1 - tak , 0 - nie
 
-// jeśli chcesz aby zawsze banowało gracza np od 10 głosów 
+// jeśli chcesz aby zawsze banowało gracza np od 10 głosów
 //voteban_percent 0
 // voteban_limit 10 // liczba głosów od jakiej ma banować
 //const VOTEBAN_NEED = 4 // tu zmieniamy ile graczy musi być na serwerze żeby można było votować innych
