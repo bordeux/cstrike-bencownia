@@ -1,9 +1,9 @@
 // Database Cvars
-ultimate_stats_host "{{ getenv "DB_HOST" }}"
-ultimate_stats_port "{{ getenv "DB_PORT" }}"
-ultimate_stats_user "{{ getenv "DB_USER" }}"
-ultimate_stats_pass "{{ getenv "DB_PASSWORD" }}"
-ultimate_stats_db "{{ getenv "DB_NAME" }}"
+ultimate_stats_host "{{ get_env(name="DB_HOST", default="fill-db-host") }}"
+ultimate_stats_port "{{ get_env(name="DB_PORT", default="3306") }}"
+ultimate_stats_user "{{ get_env(name="DB_USER", default="fill-db-user") }}"
+ultimate_stats_pass "{{ get_env(name="DB_PASSWORD", default="fill-db-password") }}"
+ultimate_stats_db "{{ get_env(name="DB_NAME", default="fill-db-name") }}"
 
 // Stats Cvars
 ultimate_stats_rank_save_type "0" // 0 - nick | 1 - steamid | 2 - ip

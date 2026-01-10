@@ -10,8 +10,8 @@ sv_allowdownload 1
 sv_allowupload 1
 mp_startmoney "5000"
 
-{{ $namePrefix := "" }}
-{{ if ne (getenv "SERVER_ENVIRONMENT") "production" }}
-    {{ $namePrefix = printf "[%s]" (getenv "SERVER_ENVIRONMENT") }}
-{{ end }}
-hostname "{{ $namePrefix }}[4FUN] 4fun.Bencownia.com"
+{% set namePrefix = "" %}
+{% if get_env(name="SERVER_ENVIRONMENT") != "production" %}
+{% set namePrefix = "[" ~ get_env(name="SERVER_ENVIRONMENT") ~ "]" %}
+{% endif %}
+hostname "{{ namePrefix }}[4FUN] 4fun.Bencownia.com"
